@@ -100,22 +100,35 @@ class MujocoEnv(gym.Env):
         for _ in range(n_frames):
             self.sim.step()
 
-    def render(self, mode='human', width=DEFAULT_SIZE, height=DEFAULT_SIZE):
+    def render(self, mode='human'):
         if mode == 'rgb_array':
-            self._get_viewer(mode).render(width, height)
+            data = self.sim.render(500, 500, camera_name='track')
+            #self._get_viewer().render()
             # window size used for old mujoco-py:
-            data = self._get_viewer(mode).read_pixels(width, height, depth=False)
+            #width, height = 500, 500
+            #data = self._get_viewer().read_pixels(width, height, depth=False)
             # original image is upside-down, so flip it
             return data[::-1, :, :]
-        elif mode == 'depth_array':
-            self._get_viewer(mode).render(width, height)
-            # window size used for old mujoco-py:
-            # Extract depth part of the read_pixels() tuple
-            data = self._get_viewer(mode).read_pixels(width, height, depth=True)[1]
-            # original image is upside-down, so flip it
-            return data[::-1, :]
         elif mode == 'human':
-            self._get_viewer(mode).render()
+            self._get_viewer().render()
+
+            
+    # def render(self, mode='human', width=DEFAULT_SIZE, height=DEFAULT_SIZE):
+    #     if mode == 'rgb_array':
+    #         self._get_viewer(mode).render(width, height)
+    #         # window size used for old mujoco-py:
+    #         data = self._get_viewer(mode).read_pixels(width, height, depth=False)
+    #         # original image is upside-down, so flip it
+    #         return data[::-1, :, :]
+    #     elif mode == 'depth_array':
+    #         self._get_viewer(mode).render(width, height)
+    #         # window size used for old mujoco-py:
+    #         # Extract depth part of the read_pixels() tuple
+    #         data = self._get_viewer(mode).read_pixels(width, height, depth=True)[1]
+    #         # original image is upside-down, so flip it
+    #         return data[::-1, :]
+    #     elif mode == 'human':
+    #         self._get_viewer(mode).render()
 
     def close(self):
         if self.viewer is not None:

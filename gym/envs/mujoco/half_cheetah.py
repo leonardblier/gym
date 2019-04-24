@@ -1,10 +1,12 @@
 import numpy as np
+import os
 from gym import utils
 from gym.envs.mujoco import mujoco_env
 
 class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
-    def __init__(self):
-        mujoco_env.MujocoEnv.__init__(self, 'half_cheetah.xml', 5)
+    def __init__(self, dt):
+        xmlconfig = f'half_cheetah_dt-{dt:.0e}.xml'
+        mujoco_env.MujocoEnv.__init__(self, xmlconfig, 5)
         utils.EzPickle.__init__(self)
 
     def step(self, action):
